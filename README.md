@@ -1,6 +1,6 @@
 # RobTop Games Web Clone
 
-![Project preview](https://i.imgur.com/P55Oabw.png)
+![Project preview](https://i.imgur.com/rv3aemN.png)
 
 This is a clone of the RobTop Games website built with Astro and Bootstrap.
 
