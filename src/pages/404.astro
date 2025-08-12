@@ -1,0 +1,139 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="404 - Page Not Found" description="Page Not Found">
+  <div class="gd-container">
+    <div class="gd-content">
+      <img src="/assets/img/logo - 404.png" alt="404" class="gd-404-img" />
+      <img
+        src="/assets/img/font1 - Level Not Found.png"
+        alt="Level Not Found"
+        class="gd-title-img"
+      />
+      <img
+        src="/assets/img/font1 - Looks like this level doesnt exist or wa.png"
+        alt="Level doesn't exist"
+        class="gd-text-img"
+      />
+      <a href="/" class="gd-button"
+        ><img src="/assets/img/ButtonText.png" alt="FONT" class="button-text" /></a
+      >
+    </div>
+  </div>
+
+  <style>
+    .gd-container {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background: none;
+    }
+
+    .gd-content {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .gd-404-img {
+      width: 300px;
+      height: auto;
+      animation: pulse 2s infinite;
+    }
+
+    .gd-title-img {
+      width: 500px;
+      height: auto;
+      margin: 1rem 0;
+    }
+
+    .gd-text-img {
+      width: 400px;
+      height: auto;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .gd-404-img {
+        width: 200px;
+      }
+
+      .gd-title-img {
+        width: 300px;
+      }
+
+      .gd-text-img {
+        width: 250px;
+      }
+
+      .gd-button {
+        padding: 8px 20px;
+      }
+
+      .button-text {
+        height: 25px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .gd-404-img {
+        width: 150px;
+      }
+
+      .gd-title-img {
+        width: 200px;
+      }
+
+      .gd-text-img {
+        width: 180px;
+      }
+
+      .gd-button {
+        padding: 6px 15px;
+      }
+
+      .button-text {
+        height: 20px;
+      }
+    }
+
+    .gd-button {
+      display: inline-block;
+      padding: 10px 30px;
+      text-decoration: none;
+      background: linear-gradient(to bottom, #00c853, #009624);
+      border: 3px solid rgb(0, 0, 0);
+      border-radius: 8px;
+      box-shadow:
+        0 0 0 2px #ffffff,
+        inset 0 5px 5px rgba(255, 255, 255, 0.3),
+        inset 0 -5px 5px rgba(0, 0, 0, 0.2);
+      margin: 2rem auto;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .button-text {
+      height: 30px;
+      width: auto;
+      display: block;
+    }
+
+    .gd-button:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 0 0 2px #ffffff,
+        inset 0 5px 5px rgba(255, 255, 255, 0.3),
+        inset 0 -5px 5px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</Layout>

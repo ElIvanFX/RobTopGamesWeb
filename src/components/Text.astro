@@ -1,0 +1,72 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<div class="container py-4">
+  <div class="card border-white text-white bg-transparent">
+    <div class="card-header">
+      <h1 class="text-center mb-0">{title}</h1>
+    </div>
+    <div class="card-body">
+      <div class="mb-4">
+        <p>
+          You are allowed to create videos of Geometry Dash, upload or stream from YouTube or other
+          video sites, and monetize those videos.
+        </p>
+      </div>
+
+      <div class="mb-4">
+        <p>
+          You may not make any other commercial use of any of our Brands or Assets. For example you
+          may not sell any merchandise that uses any of our Brands or Assets and you may not use our
+          Names as keywords or search tags for products that have no relationship with them.
+        </p>
+      </div>
+
+      <div class="mb-4">
+        <p>
+          Do not copy or take any assets from our content and distribute them separately (like
+          characters, voices, music, images).
+        </p>
+      </div>
+
+      <div>
+        <p>
+          Please remember that these guidelines apply only to content created or distributed by
+          RobTop Games: if you use third party content, such as music from your favourite artist,
+          you need a separate permission from them.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    border-radius: 10px;
+    border-width: 2px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .card-header {
+    background-color: transparent;
+    border-bottom: 2px solid white;
+    border-radius: 8px 8px 0 0;
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+</style>

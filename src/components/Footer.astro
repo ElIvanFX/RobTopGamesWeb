@@ -1,0 +1,65 @@
+---
+const currentPath = Astro.url.pathname;
+---
+
+{
+  currentPath !== "/youtube" && (
+    <section>
+      <div>
+        <div class="container">
+          <div class="text-center mt-3">
+            <>
+              <img
+                class="me-2"
+                width="92"
+                height="88"
+                src="https://www.robtopgames.com/Images/icon_200b.png"
+              />
+              <img
+                class="me-2"
+                width="92"
+                height="88"
+                src="https://www.robtopgames.com/Images/icon_200.png"
+              />
+            </>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<section>
+  <div class="text-center mt-3">
+    <img
+      class="me-0"
+      width="69"
+      height="66"
+      src="https://www.robtopgames.com/Images/letter.png"
+    /><a class="me-0 pe-0" href="mailto:info@robtopgames.com"
+      ><img
+        class="ms-0 ps-0 me-2"
+        width="98"
+        height="45"
+        src="https://www.robtopgames.com/Images/contact.png"
+      /></a
+    >
+  </div>
+</section>
+
+{
+  currentPath !== "/youtube" && (
+    <section>
+      <div class="d-flex justify-content-center align-items-center">
+        <a class="text-decoration-none text-center footer-text" href="/youtube">
+          <>
+            <br />
+            <span style="color: white;">Video Policy</span>
+            <br />
+            <br />
+          </>
+        </a>
+      </div>
+    </section>
+  )
+}
