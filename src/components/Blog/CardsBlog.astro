@@ -1,0 +1,191 @@
+---
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog', ({ data }) => {
+  return data.publish === true;
+});
+
+// Sort posts by creation date (newest first)
+const sortedPosts = posts.sort((a, b) => Number(b.data.createdAt.valueOf()) - Number(a.data.createdAt.valueOf()));
+---
+
+<style>
+  .article-card .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(2, 129, 198, 0.2);
+    background: linear-gradient(180deg, #003553, #001a29);
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+
+  .article-card .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(2, 129, 198, 0.2);
+    border-color: rgba(2, 129, 198, 0.4);
+  }
+
+  .article-card .badge {
+    transition: all 0.3s ease;
+    background-color: #0281C6 !important;
+    color: white;
+    font-weight: normal;
+    padding: 0.5em 1em;
+    font-size: 0.85rem;
+    opacity: 0.9;
+  }
+
+  .article-card .badge:hover {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+
+  .article-card .card-title {
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
+    color: white;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .article-card .card-text {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .article-card .date-text {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6) !important;
+    margin-top: auto;
+  }
+
+  .container {
+    max-width: 1200px;
+    padding: 0 2rem;
+  }
+
+  .row {
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .article-card {
+    padding: 0;
+    margin-bottom: 1rem;
+  }
+
+  .card-body {
+    padding: 2rem !important;
+  }
+
+  @media (min-width: 768px) {
+    .row-cols-md-2 > * {
+      width: calc(50% - 1rem);
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .row-cols-xl-3 > * {
+      width: calc(33.333% - 1.333rem);
+    }
+  }
+</style>
+
+<script>
+  let searchInput: HTMLInputElement | null;
+  let searchButton: HTMLButtonElement | null;
+  let articleCards: NodeListOf<Element>;
+
+  function performSearch() {
+    const searchTerm = searchInput?.value.toLowerCase() || '';
+    
+    articleCards.forEach(card => {
+      const title = card.querySelector('.card-title')?.textContent?.toLowerCase() || '';
+      const description = card.querySelector('.card-text')?.textContent?.toLowerCase() || '';
+      const tags = card.querySelector('.article-tags')?.textContent?.toLowerCase() || '';
+      
+      const matches = title.includes(searchTerm) || 
+                     description.includes(searchTerm) || 
+                     tags.includes(searchTerm);
+
+      (card as HTMLElement).style.display = matches ? 'block' : 'none';
+    });
+
+    // Show message when no results found
+    const visibleCards = document.querySelectorAll('.article-card[style="display: block"]');
+    const noResults = document.querySelector('#noResults');
+    if (noResults) {
+      noResults.classList.toggle('d-none', visibleCards.length > 0);
+    }
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    searchInput = document.querySelector('#searchInput');
+    searchButton = document.querySelector('#search-button');
+    articleCards = document.querySelectorAll('.article-card');
+
+    searchInput?.addEventListener('input', performSearch);
+    
+    searchButton?.addEventListener('click', performSearch);
+
+    searchInput?.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        performSearch();
+      }
+    });
+  });
+</script>
+
+<section>
+  <div class="container">
+    <div>
+      <h1 class="text-center mt-3 text-white"><strong>BLOG</strong></h1>
+      <p class="text-center text-white"><br>RobTop Games Blog (Not Official)<br><br></p>
+      <div class="d-flex justify-content-center align-items-center">
+    </div>
+  </div>
+</section>
+
+<div class="container py-4 py-xl-5">
+  {sortedPosts.length === 0 ? (
+    <div class="text-center text-white">
+      <h3>No Articles Published</h3>
+      <p>New content coming soon.</p>
+    </div>
+  ) : (
+    <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
+      <div id="noResults" class="col-12 text-center text-white d-none">
+        <h3>No Articles Found</h3>
+        <p>Try searching with different terms.</p>
+      </div>
+      {sortedPosts.map((post) => (
+        <div class="col article-card">
+          <a href={`/blog/${post.slug}`} class="text-decoration-none">
+            <div class="card h-100 text-white rounded-3"> 
+              <div class="card-body p-4 d-flex flex-column">
+                <h4 class="card-title fw-bold mb-3">{post.data.title}</h4>
+                <p class="card-text flex-grow-1">{post.data.description}</p>
+                <div class="d-flex flex-wrap gap-2 mb-3 article-tags">
+                  {post.data.tags?.map((tag) => (
+                    <span class="badge rounded-pill">{tag}</span>
+                  ))}
+                </div>
+                <p class="date-text mb-0">
+                  {new Date(post.data.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </p>
+              </div>
+            </div>
+          </a>
+        </div>
+      ))}
+    </div>
+  )}
+</div>

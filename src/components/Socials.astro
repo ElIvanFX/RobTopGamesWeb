@@ -2,50 +2,83 @@
   <div>
     <div class="container">
       <div class="text-center d-flex justify-content-center align-items-center mt-3">
-        <a href="https://www.youtube.com/channel/UCz_yk8mDSAnxJq0ar66L4sw" target="_blank"
-          ><img
-            class="me-2"
+        <a href="https://www.youtube.com/channel/UCz_yk8mDSAnxJq0ar66L4sw" target="_blank" class="social-icon">
+          <img
             width="50"
             height="48"
             src="https://www.robtopgames.com/Images/gj_ytIcon_001.png"
-          /></a
-        ><a href="https://x.com/robtopgames" target="_blank"
-          ><img
-            class="me-2"
+          />
+        </a>
+        <a href="https://x.com/robtopgames" target="_blank" class="social-icon">
+          <img
             width="50"
             height="48"
             src="https://www.robtopgames.com/Images/gj_twIcon_001.png"
-          /></a
-        ><a href="https://www.facebook.com/geometrydash" target="_blank"
-          ><img
-            class="me-2"
+          />
+        </a>
+        <a href="https://www.facebook.com/geometrydash" target="_blank" class="social-icon">
+          <img
             width="50"
             height="48"
             src="https://www.robtopgames.com/Images/gj_fbIcon_001.png"
-          /></a
-        ><a href="https://discord.com/invite/geometrydash" target="_blank"
-          ><img
-            class="me-2"
+          />
+        </a>
+        <a href="https://discord.com/invite/geometrydash" target="_blank" class="social-icon">
+          <img
             width="50"
             height="48"
             src="https://www.robtopgames.com/Images/gj_discordIcon_001.png"
-          /></a
-        ><a href="https://www.reddit.com/r/geometrydash/" target="_blank"
-          ><img
-            class="me-2"
+          />
+        </a>
+        <a href="https://www.reddit.com/r/geometrydash/" target="_blank" class="social-icon">
+          <img
             width="50"
             height="48"
             src="https://www.robtopgames.com/Images/gj_rdIcon_001.png"
-          /></a
-        ><a href="https://www.twitch.tv/directory/category/geometry-dash" target="_blank"
-          ><img
-            class="me-2"
+          />
+        </a>
+        <a href="https://www.twitch.tv/directory/category/geometry-dash" target="_blank" class="social-icon">
+          <img
             width="50"
             height="48"
             src="https://www.robtopgames.com/Images/gj_twitchIcon_001.png"
-          /></a
-        >
+          />
+        </a>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  .social-icon {
+    margin: 0 0.5rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+    position: relative;
+  }
+
+  .social-icon img {
+    transition: transform 0.3s ease;
+  }
+
+  .social-icon:hover img {
+    transform: translateY(-5px);
+    filter: drop-shadow(0 5px 15px rgba(2, 129, 198, 0.4));
+  }
+
+  .social-icon::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #0281C6, transparent);
+    bottom: -5px;
+    left: 0;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .social-icon:hover::after {
+    transform: scaleX(1);
+  }
+</style>

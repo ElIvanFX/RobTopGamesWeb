@@ -1,0 +1,294 @@
+---
+import { getCollection } from 'astro:content';
+import PostLayout from '../../layouts/PostLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+// Generate navigation path
+const pathSegments = post.slug.split('/');
+const breadcrumbs = pathSegments.map((segment, index) => {
+  return {
+    label: segment.replace(/-/g, ' '),
+    url: index === pathSegments.length - 1 ? null : `/blog/${pathSegments.slice(0, index + 1).join('/')}`
+  };
+});
+---
+
+<PostLayout title={post.data.title} description={post.data.description} image={post.data.image}>
+  <div class="container py-4">
+    <nav class="d-flex flex-wrap align-items-center gap-2 mb-4 text-white px-2 py-3 bg-dark bg-opacity-25 rounded-4 shadow-sm">
+      <a href="/" class="text-white d-flex align-items-center text-decoration-none transition-all hover-bright">
+        <i class="bi bi-house-fill"></i>
+      </a>
+      <i class="bi bi-chevron-right opacity-50 text-white"></i>
+      <a href="/blog" class="text-white text-decoration-none transition-all hover-bright">Blog</a>
+      {breadcrumbs.map((crumb, index) => (
+        <>
+          <i class="bi bi-chevron-right opacity-50 text-white"></i>
+          {crumb.url ? (
+            <a href={crumb.url} class="text-white text-decoration-none text-capitalize transition-all hover-bright">
+              {crumb.label}
+            </a>
+          ) : (
+            <span class="text-white text-capitalize">{crumb.label}</span>
+          )}
+        </>
+      ))}
+    </nav>
+
+    <div class="row gx-3">
+      <div class="col-12 col-lg-8">
+        <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-3 mb-4 p-3 bg-dark bg-opacity-25 rounded-4 shadow-sm">
+          <img 
+            class="rounded-circle object-fit-cover shadow" 
+            width="60" 
+            height="60" 
+            src={post.data.authorImage}
+            alt={post.data.author}
+          />
+          <div>
+            <h5 class="fw-bold text-white mb-1">{post.data.author}</h5>
+            <p class="text-white mb-0 d-flex flex-wrap align-items-center gap-2">
+              <i class="bi bi-calendar3"></i>
+              {new Date(post.data.createdAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+              <span class="opacity-50">·</span>
+              <i class="bi bi-clock"></i>
+              {Math.floor((Date.now() - new Date(post.data.createdAt).getTime()) / (1000 * 60 * 60 * 24))} days ago
+            </p>
+          </div>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 mb-4 mb-lg-5">
+          {post.data.tags?.map((tag) => (
+            <span class="badge rounded-pill text-white px-3 py-2 fs-6" style="background-color: rgba(2, 129, 198, 0.2);">
+              <i class="bi bi-hash"></i>
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <h1 class="display-4 fw-bold text-white mb-4 mb-lg-5 ps-2 border-start border-4" style="border-color: #0281C6 !important;">
+          <i class="bi bi-hash text-primary"></i>
+          {post.data.title}
+        </h1>
+
+        <div class="card bg-dark text-white border-0 rounded-4 shadow-lg overflow-hidden mb-4 mb-lg-5 hover-scale transition-all">
+          <div class="position-relative" style="height: 300px; height: clamp(300px, 50vw, 400px); overflow: hidden;">
+            <img 
+              class="object-fit-cover w-100 h-100" 
+              src={post.data.image} 
+              alt={post.data.title}
+            />
+          </div>
+        </div>
+
+        <div class="content prose prose-invert bg-dark bg-opacity-25 p-3 p-lg-4 rounded-4 shadow-sm text-white">
+          <Content />
+        </div>
+
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3 mt-4 mt-lg-5 pt-4 pt-lg-5 border-top" style="border-color: rgba(2, 129, 198, 0.2) !important;">
+          <div class="d-flex gap-3 w-100 justify-content-center justify-content-sm-start">
+            <button class="btn btn-dark d-flex align-items-center gap-2 shadow-sm hover-scale flex-grow-1 flex-sm-grow-0">
+              <i class="bi bi-hand-thumbs-up-fill"></i>
+              Like
+            </button>
+            <button class="btn btn-dark d-flex align-items-center gap-2 shadow-sm hover-scale flex-grow-1 flex-sm-grow-0">
+              <i class="bi bi-chat-fill"></i>
+              Comment
+            </button>
+          </div>
+          <button class="btn btn-dark d-flex align-items-center gap-2 shadow-sm hover-scale w-100 w-sm-auto">
+            <i class="bi bi-share-fill"></i>
+            Share
+          </button>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-4 mt-4 mt-lg-0">
+        <div class="position-sticky" style="top: 2rem;">
+          <div class="bg-dark bg-opacity-25 p-3 p-lg-4 rounded-4 shadow-sm mb-4">
+            <h5 class="text-white mb-3">Recent Articles</h5>
+            <div class="d-flex flex-column gap-3">
+              {(async () => {
+                const allPosts = await getCollection('blog');
+                
+                // Get 3 most recent posts
+                const recentPosts = allPosts
+                  .filter(p => p.data.publish === true)
+                  .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime())
+                  .slice(0, 3);
+
+                return recentPosts.map(recentPost => (
+                  <a href={`/blog/${recentPost.slug}`} class="text-decoration-none">
+                    <div class="d-flex gap-3 p-3 rounded-3 bg-dark bg-opacity-50 transition-all hover-bright">
+                      <div class="rounded-3 overflow-hidden" style="width: 80px; height: 80px;">
+                        <img 
+                          class="object-fit-cover w-100 h-100" 
+                          src={recentPost.data.image} 
+                          alt={recentPost.data.title}
+                        />
+                      </div>
+                      <div>
+                        <h6 class="text-white mb-1">{recentPost.data.title}</h6>
+                        <p class="text-white mb-0 small">
+                          {Math.floor((Date.now() - new Date(recentPost.data.createdAt).getTime()) / (1000 * 60 * 60 * 24))} days ago
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                ));
+              })()}
+            </div>
+          </div>
+
+          <div class="bg-dark bg-opacity-25 p-3 p-lg-4 rounded-4 shadow-sm">
+            <h5 class="text-white mb-3">Popular Categories</h5>
+            <div class="d-flex flex-wrap gap-2">
+              {post.data.tags?.map((tag) => (
+                <a 
+                  href={`/blog/tag/${tag}`}
+                  class="badge rounded-pill text-white px-3 py-2 text-decoration-none transition-all hover-bright"
+                  style="background-color: rgba(2, 129, 198, 0.2);"
+                >
+                  {tag}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</PostLayout>
+
+<style>
+  .content {
+    font-size: 1.1rem;
+    line-height: 1.75;
+  }
+
+  .content :global(h2) {
+    font-size: 1.875rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    color: white;
+  }
+
+  .content :global(h3) {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: bold;
+    color: white;
+  }
+
+  .content :global(p) {
+    margin-bottom: 1.25rem;
+    color: white;
+  }
+
+  .content :global(ul),
+  .content :global(ol) {
+    margin-bottom: 1.25rem;
+    padding-left: 1.25rem;
+    color: white;
+  }
+
+  .content :global(li) {
+    margin-bottom: 0.5rem;
+    color: white;
+  }
+
+  .content :global(a) {
+    color: #0281C6;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .content :global(a:hover) {
+    text-decoration: underline;
+    opacity: 0.8;
+  }
+
+  .content :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .content :global(blockquote) {
+    border-left: 4px solid #0281C6;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: white;
+  }
+
+  .content :global(code) {
+    background-color: rgba(2, 129, 198, 0.1);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+    color: white;
+  }
+
+  .content :global(pre) {
+    background-color: #1a1e2e;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+
+  .content :global(pre code) {
+    background-color: transparent;
+    padding: 0;
+    font-size: 0.875em;
+    color: white;
+  }
+
+  .transition-all {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .hover-bright:hover {
+    opacity: 0.8;
+  }
+
+  .hover-scale {
+    transform: scale(1);
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.02);
+  }
+
+  @media (max-width: 576px) {
+    .content {
+      font-size: 1rem;
+    }
+
+    .content :global(h2) {
+      font-size: 1.5rem;
+    }
+
+    .content :global(h3) {
+      font-size: 1.25rem;
+    }
+  }
+</style>
