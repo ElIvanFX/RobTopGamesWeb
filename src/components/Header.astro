@@ -27,16 +27,18 @@ const isActive = (href: string) => {
   </div>
   
   <nav class="navbar navbar-expand-lg mb-4">
-    <div class="container">
-      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="bi bi-list text-white"></i>
-      </button>
+    <div class="container-fluid">
+      <div class="w-100 d-flex justify-content-center d-lg-none">
+        <button class="navbar-toggler border-0 fs-4 px-3 py-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="bi bi-list text-white"></i>
+        </button>
+      </div>
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-        <ul class="navbar-nav gap-2">
+        <ul class="navbar-nav gap-2 text-center">
           {menuItems.map((item) => (
             <li class="nav-item">
               <a
-                class={`nav-link text-white d-flex align-items-center gap-2 px-3 py-2 rounded-3 transition-all ${isActive(item.href) ? 'active bg-primary' : 'hover-bright'}`}
+                class={`nav-link text-white d-flex align-items-center justify-content-center gap-2 px-3 py-2 rounded-3 transition-all ${isActive(item.href) ? 'active bg-primary' : 'hover-bright'}`}
                 href={item.href}
                 aria-current={isActive(item.href) ? 'page' : null}
               >
@@ -52,6 +54,17 @@ const isActive = (href: string) => {
 </header>
 
 <style>
+  .navbar-toggler {
+    box-shadow: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .navbar-toggler:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
   .navbar-toggler:focus {
     box-shadow: none;
   }
