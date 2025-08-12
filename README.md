@@ -16,7 +16,7 @@ This is a clone of the RobTop Games website built with Astro and Bootstrap.
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/GD-Web.git
+git clone https://github.com/ElIvanFX/GD-Web.git
 cd GD-Web
 ```
 
