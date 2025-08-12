@@ -1,9 +1,9 @@
 ---
-const currentPath = Astro.url.pathname;
+const pathname = Astro.url.pathname;
 ---
 
 {
-  currentPath !== "/youtube" && (
+  pathname !== "/youtube" ? (
     <section>
       <div>
         <div class="container">
@@ -26,7 +26,7 @@ const currentPath = Astro.url.pathname;
         </div>
       </div>
     </section>
-  )
+  ) : null
 }
 
 <section>
@@ -48,7 +48,7 @@ const currentPath = Astro.url.pathname;
 </section>
 
 {
-  currentPath !== "/youtube" && (
+  pathname !== "/youtube" ? (
     <section>
       <div class="d-flex justify-content-center align-items-center">
         <a class="text-decoration-none text-center footer-text" href="/youtube">
@@ -61,5 +61,5 @@ const currentPath = Astro.url.pathname;
         </a>
       </div>
     </section>
-  )
+  ) : null
 }
