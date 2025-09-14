@@ -1,0 +1,46 @@
+---
+interface Props {
+  levelId: string;
+}
+
+const { levelId } = Astro.props;
+
+const response = await fetch(`https://history.geometrydash.eu/api/v1/level/${levelId}/`);
+const levelData = await response.json();
+---
+
+<div class="gd-level-card p-4 rounded-3 mb-4">
+  <h2 class="text-center mb-3">{levelData.name}</h2>
+  <div class="level-info">
+    <p><strong>Creator:</strong> {levelData.creator}</p>
+    <p><strong>Description:</strong> {levelData.description || 'No description'}</p>
+    <p><strong>Difficulty:</strong> {levelData.difficulty}</p>
+    <p><strong>Downloads:</strong> {levelData.downloads.toLocaleString()}</p>
+    <p><strong>Likes:</strong> {levelData.likes.toLocaleString()}</p>
+    <p><strong>Length:</strong> {levelData.length}</p>
+    <p><strong>Stars:</strong> {levelData.stars}</p>
+    <p><strong>Version:</strong> {levelData.version}</p>
+  </div>
+</div>
+
+<style>
+  .gd-level-card {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .level-info p {
+    margin-bottom: 0.5rem;
+  }
+
+  h2 {
+    color: #00ff00;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+  }
+
+  strong {
+    color: #00ff00;
+  }
+</style>

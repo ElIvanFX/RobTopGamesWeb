@@ -6,5 +6,6 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
+  output: 'server',
   // Habilitar colecciones de contenido
 });
